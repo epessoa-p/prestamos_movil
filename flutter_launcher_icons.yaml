@@ -1,0 +1,9 @@
+# Ícono de la app: logo de Santa Ana. Regenerar con: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/images/logo-santaana.png
+  remove_alpha_ios: true
+  adaptive_icon_background: "#FDFDFD"
+  adaptive_icon_foreground: assets/images/logo-santaana.png
+  min_sdk_android: 21

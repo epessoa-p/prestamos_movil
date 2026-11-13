@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "425877638353",
+    "project_id": "prestamos-sa",
+    "storage_bucket": "prestamos-sa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425877638353:android:cb2c0d7bcb6464d4d009f0",
+        "android_client_info": {
+          "package_name": "com.proceso.prestamos_movil_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYvXO2tCYwyGxBWdH5rKYmphTKIPDnUjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

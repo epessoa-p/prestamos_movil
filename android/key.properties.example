@@ -1,0 +1,6 @@
+# Copiar este archivo como android/key.properties y completar con los datos reales.
+# key.properties NO se sube al repositorio (contiene contraseñas). Ver GUIA-FIRMA-RELEASE.md.
+storePassword=LA_CONTRASEÑA_DEL_KEYSTORE
+keyPassword=LA_CONTRASEÑA_DEL_KEYSTORE
+keyAlias=santaana
+storeFile=santaana-release.jks
