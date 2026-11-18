@@ -16,7 +16,7 @@ class AppConfig {
   static const String productionBaseUrl = 'https://santaana2.sczsoft.net/api/v1';
 
   /// IP de la PC en la red local (Wi-Fi) y puerto de `php artisan serve`.
-  static const String localApiHost = String.fromEnvironment('LOCAL_API_HOST', defaultValue: '192.168.0.22');
+  static const String localApiHost = String.fromEnvironment('LOCAL_API_HOST', defaultValue: '192.168.0.13');
   static const String localApiPort = String.fromEnvironment('LOCAL_API_PORT', defaultValue: '8010');
   static const String localBaseUrl = 'http://$localApiHost:$localApiPort/api/v1';
 
