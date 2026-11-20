@@ -436,6 +436,28 @@ class ApiService {
     return _asMap(response.data);
   }
 
+  /// Fotos del producto (las de su préstamo, compra o ingreso). data: photos, can_edit, max_photos.
+  Future<Map<String, dynamic>> productPhotos(int productId) async {
+    final response = await _dio.get('/inventory/products/$productId/photos', options: _authOptions());
+    return _asMap(response.data);
+  }
+
+  /// Agrega fotos al producto (se guardan en su préstamo, compra o ingreso). data: photos.
+  Future<Map<String, dynamic>> addProductPhotos(int productId, List<String> imagePaths) async {
+    final form = FormData();
+    for (final p in imagePaths) {
+      form.files.add(MapEntry('images[]', await MultipartFile.fromFile(p, filename: p.split(RegExp(r'[\\/]+')).last)));
+    }
+    final response = await _dio.post('/inventory/products/$productId/photos', data: form, options: _authOptions());
+    return _asMap(response.data);
+  }
+
+  /// Elimina una foto del producto (también del préstamo, la compra o el ingreso). data: photos.
+  Future<Map<String, dynamic>> deleteProductPhoto(int productId, String type, int photoId) async {
+    final response = await _dio.delete('/inventory/products/$productId/photos/$type/$photoId', options: _authOptions());
+    return _asMap(response.data);
+  }
+
   Future<Map<String, dynamic>> inventoryOptions({String? query, int productLimit = 100}) async {
     final response = await _dio.get(
       '/inventory/options',

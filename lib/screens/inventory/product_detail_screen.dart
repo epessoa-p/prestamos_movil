@@ -8,6 +8,7 @@ import '../../utils/api_errors.dart';
 import '../../utils/currency.dart';
 import '../../utils/number_utils.dart';
 import '../widgets/common_widgets.dart';
+import 'product_photos_section.dart';
 
 /// Derives the public base of the API URL to build Storage URLs.
 /// E.g. "https://santaana2.sczsoft.net/api/v1" → "https://santaana2.sczsoft.net"
@@ -81,6 +82,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
+  /// Recarga solo los movimientos (sus fotos cambian al agregar o eliminar fotos del producto).
+  Future<void> _reloadMovements() async {
+    try {
+      final data = await widget.api.inventoryStockDetail(widget.productId);
+      if (mounted) setState(() => _recentMovements = _asList(data['recent_movements']));
+    } catch (_) {}
+  }
+
   Map<String, dynamic> _asMap(dynamic v) {
     if (v is Map<String, dynamic>) return v;
     if (v is Map) return Map<String, dynamic>.from(v);
@@ -136,6 +145,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             else ...[
               SliverToBoxAdapter(child: _buildSummaryCard()),
               SliverToBoxAdapter(child: _buildPriceCard()),
+              SliverToBoxAdapter(
+                child: ProductPhotosSection(
+                  api: widget.api,
+                  logger: widget.logger,
+                  productId: widget.productId,
+                  storageBase: _storageBase(widget.api.baseUrl),
+                  // Las fotos de los movimientos (más abajo) son las mismas: se recargan al cambiarlas.
+                  onChanged: () {
+                    _priceChanged = true;
+                    _reloadMovements();
+                  },
+                ),
+              ),
               SliverToBoxAdapter(child: _buildWarehouseSection()),
               SliverToBoxAdapter(child: _buildMovementsSection()),
               const SliverToBoxAdapter(child: SizedBox(height: 32)),
