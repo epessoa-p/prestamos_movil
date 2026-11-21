@@ -82,36 +82,13 @@ class _ProductPhotosSectionState extends State<ProductPhotosSection> {
     );
   }
 
-  Future<void> _add() async {
+  /// [source]: 'camera' (tomar foto) o 'gallery' (subir imágenes de la galería, varias).
+  Future<void> _add(String source) async {
     final left = _max - _photos.length;
     if (left <= 0) {
       _snack('El producto ya tiene $_max fotos (el máximo).', error: true);
       return;
     }
-
-    final source = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_camera_rounded),
-              title: const Text('Tomar foto'),
-              onTap: () => Navigator.pop(ctx, 'camera'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library_rounded),
-              title: const Text('Elegir de la galería'),
-              subtitle: Text('Puedes elegir varias (hasta $left)'),
-              onTap: () => Navigator.pop(ctx, 'gallery'),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (source == null) return;
 
     List<String> paths;
     try {
@@ -212,16 +189,35 @@ class _ProductPhotosSectionState extends State<ProductPhotosSection> {
                   const Padding(
                     padding: EdgeInsets.all(12),
                     child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
-                  )
-                else if (_canEdit)
-                  TextButton.icon(
-                    onPressed: _add,
-                    icon: const Icon(Icons.add_a_photo_rounded, size: 18),
-                    label: const Text('Agregar'),
                   ),
               ],
             ),
-            const SizedBox(height: 6),
+            if (_canEdit && !_loading) ...[
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.tonalIcon(
+                        onPressed: _busy ? null : () => _add('camera'),
+                        icon: const Icon(Icons.photo_camera_rounded, size: 18),
+                        label: const Text('Tomar foto'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _busy ? null : () => _add('gallery'),
+                        icon: const Icon(Icons.upload_rounded, size: 18),
+                        label: const Text('Subir imagen'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: 8),
             if (_loading)
               const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator()))
             else if (_error != null)
@@ -233,7 +229,7 @@ class _ProductPhotosSectionState extends State<ProductPhotosSection> {
               Padding(
                 padding: const EdgeInsets.only(right: 6, bottom: 2),
                 child: Text(
-                  _canEdit ? 'Sin fotos. Toca "Agregar" para tomar o elegir fotos.' : 'Este producto no tiene fotos.',
+                  _canEdit ? 'Sin fotos. Toma una foto o sube imágenes de la galería.' : 'Este producto no tiene fotos.',
                   style: const TextStyle(color: Color(0xFF6A8299), fontSize: 13),
                 ),
               )
